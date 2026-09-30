@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "SEMAJ Elite Autos"
+description = "A premium automotive showroom for Nigerian buyers, with searchable inventory, vehicle inspection galleries, transparent sourcing, and direct WhatsApp dealer contact."
+version = "1.0.0"
+id = "artifacts/semaj-elite-autos"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 25344
+
+[services.development]
+run = "pnpm --filter @workspace/semaj-elite-autos run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/semaj-elite-autos", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/semaj-elite-autos/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "25344"
+BASE_PATH = "/"

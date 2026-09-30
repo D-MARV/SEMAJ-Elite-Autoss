@@ -1,0 +1,309 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+:root {
+  --background: 38 35% 95%;
+  --foreground: 210 18% 13%;
+  --card: 38 38% 98%;
+  --card-foreground: 210 18% 13%;
+  --border: 35 18% 83%;
+  --input: 35 18% 83%;
+  --ring: 0 100% 42%;
+  --primary: 0 100% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 211 19% 22%;
+  --secondary-foreground: 38 35% 95%;
+  --muted: 35 22% 90%;
+  --muted-foreground: 210 10% 39%;
+  --accent: 205 24% 45%;
+  --accent-foreground: 0 0% 100%;
+  --popover: 38 38% 98%;
+  --popover-foreground: 210 18% 13%;
+  --radius: 1.75rem;
+  --app-font-sans: 'DM Sans', sans-serif;
+  --app-font-display: 'Space Grotesk', sans-serif;
+  --crimson: #d60000;
+  --obsidian: #17191b;
+  --offwhite: #f8f9fa;
+  --site-offwhite: #f7f1e8;
+}
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --font-sans: var(--app-font-sans);
+  --font-display: var(--app-font-display);
+}
+
+* { box-sizing: border-box; }
+/* (7) No sideways scrolling on any screen size */
+html { scroll-behavior: smooth; scrollbar-width: thin; scrollbar-color: #d60000 #e9e1d7; overflow-x: hidden; max-width: 100%; }
+html::-webkit-scrollbar { width: 6px; }
+html::-webkit-scrollbar-track { background: #e9e1d7; }
+html::-webkit-scrollbar-thumb { background: #d60000; border-radius: 999px; }
+body { margin: 0; overflow-x: hidden; max-width: 100%; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--app-font-sans); -webkit-font-smoothing: antialiased; }
+/* `clip` (not `hidden`) on wrappers and sections: it cuts off anything sticking out sideways
+   (scroll-reveal elements that start 56px off to the left/right) without creating a scroll container. */
+#root, .page-enter, main, section { max-width: 100%; overflow-x: clip; }
+button, a, input, textarea, select { font: inherit; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid hsl(var(--primary)); outline-offset: 3px; }
+.font-display { font-family: var(--app-font-display); }
+
+/* ---------- Logo ---------- */
+.semaj-logo { display: block; width: 100%; height: 100%; object-fit: contain; }
+
+/* ---------- Preloader (2) ---------- */
+.preloader { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow: hidden; background: var(--site-offwhite); opacity: 1; transition: opacity .5s ease; }
+.preloader.is-exiting { opacity: 0; pointer-events: none; }
+/* Pulse: grows and shrinks once across the 3.5s the preloader is visible */
+.preloader-logo { position: relative; width: min(72vw, 460px); animation: preloaderPulse 3.5s ease-in-out infinite; will-change: transform; }
+.preloader-logo-img { display: block; width: 100%; height: auto; user-select: none; }
+/* Shimmer: an overlay that is MASKED with the logo itself, so light only appears on the letters and lines */
+.preloader-shine {
+  position: absolute; inset: 0;
+  background: linear-gradient(105deg, transparent 36%, rgba(255,255,255,.95) 50%, transparent 64%);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
+  background-position: 100% 0;
+  -webkit-mask-size: 100% 100%; mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center; mask-position: center;
+  animation: preloaderShine 1.75s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes preloaderPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes preloaderShine { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+
+/* ---------- Effects ---------- */
+.shimmer { position: relative; overflow: hidden; }
+.shimmer::after { content: ''; position: absolute; inset: 0; transform: translateX(-120%); background: linear-gradient(110deg, transparent 35%, rgba(255,255,255,.28) 50%, transparent 65%); animation: shimmer 3.8s infinite; pointer-events: none; }
+@keyframes shimmer { to { transform: translateX(120%); } }
+.reveal { animation: reveal .75s both cubic-bezier(.2,.8,.2,1); }
+.fade-swap { animation: fadeSwap .65s both ease; }
+.delay-1 { animation-delay: .12s; }
+.delay-2 { animation-delay: .24s; }
+.delay-3 { animation-delay: .36s; }
+@keyframes reveal { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeSwap { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Page transition: opacity only (a transform here would break position:fixed children) */
+.page-enter { animation: pageFade .7s ease both; }
+@keyframes pageFade { from { opacity: 0; } to { opacity: 1; } }
+
+/* ---------- Scroll-reveal (IntersectionObserver adds .rv-in) ---------- */
+.rv { opacity: 0; transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); will-change: opacity, transform; }
+.rv-up { transform: translateY(48px) scale(.97); }
+.rv-left { transform: translateX(-56px); }
+.rv-right { transform: translateX(56px); }
+.rv-scale { transform: scale(.9); }
+.rv.rv-in { opacity: 1; transform: none; }
+
+/* ---------- Hero (1, 4, 7) ---------- */
+/* 100vh is the fallback; browsers that know dvh use it (it tracks the phone's real visible height). */
+.hero-section { min-height: 100vh; min-height: 100dvh; width: 100%; max-width: 100%; overflow: hidden; }
+.hero-inner { min-height: 100vh; min-height: 100dvh; width: 100%; max-width: 1440px; box-sizing: border-box; }
+.hero-section img { max-width: 100%; }
+.hero-title { font-size: clamp(3.25rem, 13.5vw, 4.75rem); line-height: .94; letter-spacing: -.04em; }
+@media (min-width: 1024px) { .hero-title { font-size: clamp(4.5rem, 6.6vw, 7rem); line-height: .95; } }
+
+/* ---------- Header (3) ---------- */
+/* Same box in both states; only width / top / radius / blur change, so it animates smoothly. */
+.site-header { position: fixed; top: 0; left: 50%; z-index: 40; width: 100%; max-width: 100%; transform: translateX(-50%); border: 1px solid transparent; border-radius: 0; color: #17191b; transition: top .4s ease, width .4s ease, border-radius .4s ease, background .35s ease, box-shadow .35s ease, border-color .35s ease, backdrop-filter .35s ease; }
+/* At the top of the page: full-width, flat, sharp corners, semi-transparent off-white */
+.header-flat { background: rgba(247,241,232,.8); border-bottom-color: rgba(23,25,27,.07); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+/* After the hero: floating rounded pill with backdrop blur */
+.header-float { top: 10px; width: min(calc(100% - 20px), 1240px); border-radius: 18px; background: rgba(250,247,242,.8); border-color: rgba(255,255,255,.6); backdrop-filter: blur(16px) saturate(1.5); -webkit-backdrop-filter: blur(16px) saturate(1.5); box-shadow: 0 8px 28px rgba(23,25,27,.12); }
+@media (min-width: 768px) { .header-float { top: 12px; width: min(calc(100% - 48px), 1240px); } }
+.header-inner { display: flex; min-height: 48px; align-items: center; gap: 18px; margin: 0 auto; max-width: 1440px; padding: 4px 20px; transition: padding .4s ease; }
+@media (min-width: 1024px) { .header-flat .header-inner { padding: 4px 40px; } }
+.header-float .header-inner { padding: 4px 12px 4px 16px; }
+.nav-link { color: #454a4d; font-size: 10px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; transition: color .2s ease; white-space: nowrap; }
+.nav-link:hover { color: #d60000; }
+.logo-link { display: block; width: 116px; height: 42px; flex-shrink: 0; }
+.desktop-nav { display: flex; flex: 1; align-items: center; justify-content: center; gap: clamp(14px, 2vw, 30px); }
+.dealer-header-cta { display: inline-flex; flex-shrink: 0; align-items: center; gap: 8px; border-radius: 999px; background: #d60000; padding: 10px 14px; color: white; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; white-space: nowrap; }
+.mobile-menu-button { display: none; padding: 8px; color: #17191b; }
+.mobile-nav { display: none; }
+
+/* Floating "Talk to dealer" (mobile + desktop) */
+.floating-dealer { position: fixed; right: 24px; bottom: 24px; z-index: 45; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; background: #d60000; padding: 13px 18px; color: white; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; box-shadow: 0 12px 24px rgba(214,0,0,.3); }
+
+/* ---------- Buttons ---------- */
+.cta-dark { display: inline-flex; align-items: center; justify-content: center; gap: 12px; border-radius: 999px; background: #17191b; padding: 14px 22px; color: white; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.cta-outline { display: inline-flex; align-items: center; justify-content: center; gap: 12px; border: 1px solid #17191b; border-radius: 999px; padding: 14px 22px; color: #17191b; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
+.cta-outline:hover { background: #17191b; color: #fff; }
+
+/* ---------- Vehicle badges + ignition (6) ---------- */
+.view-badge { display: inline-flex; min-height: 30px; align-items: center; justify-content: center; border-radius: 999px; background: rgba(23,25,27,.78); padding: 8px 13px; color: white; font-size: 9px; font-weight: 700; line-height: 1; letter-spacing: .14em; text-transform: uppercase; backdrop-filter: blur(8px); }
+.view-badge-small { position: absolute; bottom: 16px; left: 16px; min-height: 26px; padding: 7px 10px; background: rgba(23,25,27,.7); }
+.engine-audio-button { display: grid; height: 40px; width: 40px; flex-shrink: 0; place-items: center; border-radius: 999px; background: #111315; color: white; }
+.ignition-btn { z-index: 3; display: inline-flex; align-items: center; gap: 7px; border: 1px solid rgba(255,255,255,.2); border-radius: 999px; background: rgba(23,25,27,.82); padding: 9px 13px; color: #fff; font-size: 9px; font-weight: 700; line-height: 1; letter-spacing: .14em; text-transform: uppercase; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.ignition-btn svg { color: #ff5a5a; }
+/* While the engine audio plays: glowing pulse, and the button is locked */
+.ignition-btn.is-running, .engine-audio-button.is-running { background: #d60000; border-color: #ff8a8a; cursor: default; animation: ignitionPulse 1s ease-in-out infinite; }
+.ignition-btn.is-running svg { color: #fff; }
+@keyframes ignitionPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,70,70,.7), 0 0 10px 2px rgba(255,70,70,.55); }
+  50% { box-shadow: 0 0 0 9px rgba(255,70,70,0), 0 0 24px 6px rgba(255,100,100,.9); }
+}
+
+/* ---------- Infinite vehicle carousel (right -> left) ---------- */
+.marquee-viewport { overflow: hidden; padding: 30px 0; -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent); }
+.animate-marquee { display: flex; width: max-content; animation: marquee 55s linear infinite; }
+.animate-marquee:hover { animation-play-state: paused; }
+.marquee-item { width: 300px; flex-shrink: 0; padding-right: 20px; }
+@media (min-width: 768px) { .marquee-item { width: 370px; } }
+@keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+
+/* ---------- Achievements ---------- */
+.stat-card { display: flex; height: 100%; min-height: 168px; flex-direction: column; justify-content: space-between; gap: 14px; border-radius: 22px; background: #17191b; padding: 20px; color: #fff; outline-offset: 4px; transition: background-color .35s ease, transform .35s ease, box-shadow .35s ease; }
+.stat-num { color: #d60000; font-family: var(--app-font-display); font-size: clamp(2rem, 3.4vw, 3.1rem); font-weight: 700; line-height: 1; transition: color .35s ease; }
+.stat-label { display: block; font-size: 14px; font-weight: 600; line-height: 1.25; color: #f1ede6; transition: color .35s ease; }
+.stat-sub { display: block; margin-top: -8px; font-size: 12px; line-height: 1.4; color: rgba(255,255,255,.55); transition: color .35s ease; }
+.stat-card:hover, .stat-card:focus-visible { background: #d60000; transform: translateY(-6px); box-shadow: 0 22px 40px rgba(214,0,0,.28); }
+.stat-card:hover .stat-num, .stat-card:hover .stat-label, .stat-card:hover .stat-sub,
+.stat-card:focus-visible .stat-num, .stat-card:focus-visible .stat-label, .stat-card:focus-visible .stat-sub { color: #fff; }
+@media (min-width: 768px) { .stat-card { padding: 26px; min-height: 190px; } }
+
+/* ---------- Video testimonial (5) ---------- */
+/* The video is portrait (1080x1920), so the card is portrait too and sits beside the intro text on desktop. */
+.video-section-grid { display: grid; gap: 28px; align-items: center; }
+@media (min-width: 1024px) { .video-section-grid { grid-template-columns: 1fr 400px; gap: 64px; } }
+.video-card { position: relative; width: min(100%, 400px); margin: 0 auto; aspect-ratio: 9 / 16; max-height: 86vh; max-height: 86dvh; overflow: hidden; border-radius: 28px; background: #17191b; box-shadow: 0 0 0 1px rgba(214,0,0,.28), 0 26px 70px -14px rgba(214,0,0,.4), 0 0 64px rgba(214,0,0,.2); }
+.video-card-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.video-card-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgba(14,16,17,.62) 0%, transparent 32%, transparent 68%, rgba(14,16,17,.5) 100%); }
+.video-caption { position: absolute; left: 18px; top: 18px; z-index: 2; max-width: calc(100% - 36px); margin: 0; border-radius: 14px; background: rgba(23,25,27,.55); padding: 10px 14px; color: #fff; font-family: var(--app-font-display); font-size: 13px; font-weight: 600; line-height: 1.3; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+.video-sound-btn { position: absolute; right: 16px; bottom: 16px; z-index: 2; display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(255,255,255,.3); border-radius: 999px; background: rgba(23,25,27,.72); padding: 11px 16px; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.video-sound-btn[aria-pressed="true"] { background: #d60000; border-color: #ff8a8a; }
+
+/* ---------- Founder ---------- */
+.founder-media { min-height: 300px; }
+
+/* ---------- Contact ---------- */
+.contact-form { display: flex; height: 100%; flex-direction: column; gap: 16px; border-radius: 28px; background: #eee7de; padding: 24px; }
+@media (min-width: 768px) { .contact-form { padding: 32px; } }
+.contact-field { display: grid; gap: 8px; }
+.contact-field > span { color: #566164; font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.contact-input { width: 100%; border: 1px solid #d7cec2; border-radius: 16px; background: #f7f1e8; padding: 14px 16px; color: #17191b; font-size: 14px; outline: none; transition: border-color .2s ease, box-shadow .2s ease; }
+.contact-input:focus { border-color: #d60000; box-shadow: 0 0 0 3px rgba(214,0,0,.12); }
+.contact-textarea { resize: vertical; min-height: 110px; }
+.contact-error { margin: 0; color: #b00000; font-size: 13px; font-weight: 600; }
+.contact-submit { display: inline-flex; align-items: center; justify-content: center; gap: 10px; border-radius: 999px; background: #d60000; padding: 15px 24px; color: #fff; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+.contact-submit-outline { border: 1px solid #17191b; background: transparent; color: #17191b; width: fit-content; }
+.contact-success { display: grid; gap: 14px; align-content: center; height: 100%; min-height: 320px; }
+.contact-card { border-radius: 22px; background: #eee7de; padding: 22px; }
+.contact-card-link { display: inline-flex; align-items: center; gap: 9px; color: #17191b; font-family: var(--app-font-display); font-size: 17px; font-weight: 600; }
+.contact-card-link:hover { color: #d60000; }
+
+.map-card { position: relative; height: 100%; min-height: 380px; overflow: hidden; border-radius: 28px; background: #d8d2c9; }
+.map-card iframe { position: absolute; inset: 0; height: 100%; }
+.map-link { position: absolute; right: 16px; bottom: 16px; z-index: 3; display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; background: #17191b; padding: 11px 14px; color: white; font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
+/* Two-finger map gesture: overlay only exists on touch screens */
+.map-overlay { display: none; position: absolute; inset: 0; z-index: 2; touch-action: pan-y pinch-zoom; }
+@media (pointer: coarse) { .map-overlay { display: block; } }
+.map-notice { position: absolute; left: 50%; top: 50%; max-width: 80%; transform: translate(-50%, -50%) scale(.95); border-radius: 14px; background: rgba(23,25,27,.86); padding: 12px 18px; color: #fff; font-size: 13px; font-weight: 600; text-align: center; opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+.map-notice.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
+/* ---------- Footer ---------- */
+.site-footer { background: #17191b; padding: 56px 20px 0; color: #f7f1e8; }
+.footer-inner { margin: 0 auto; max-width: 1440px; }
+.footer-grid { display: grid; gap: 36px 28px; border-bottom: 1px solid rgba(255,255,255,.1); padding-bottom: 44px; grid-template-columns: 1.4fr repeat(4, 1fr); }
+.footer-logo { width: 150px; height: 52px; }
+.footer-tagline { max-width: 280px; margin: 18px 0 0; color: #b5b8b9; font-size: 14px; line-height: 1.7; }
+.footer-socials { display: flex; gap: 10px; margin-top: 22px; }
+.social-badge { display: grid; height: 40px; width: 40px; place-items: center; border: 1px solid rgba(255,255,255,.22); border-radius: 999px; color: #f7f1e8; }
+.social-badge:hover { background: #d60000; border-color: #d60000; }
+.footer-label { margin: 0 0 16px; color: #a9abad; font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; }
+.footer-label-dark { color: #566164; }
+.footer-links { display: grid; gap: 12px; }
+.footer-links a, .footer-line { display: flex; align-items: center; gap: 8px; color: #e5e0d7; font-size: 13px; line-height: 1.5; transition: color .2s ease; }
+.footer-links a:hover { color: #ff5757; }
+.footer-bottom { display: flex; justify-content: space-between; gap: 12px; padding: 20px 0; color: #8a8e8f; font-size: 11px; letter-spacing: .06em; }
+@media (min-width: 1024px) { .site-footer { padding-left: 40px; padding-right: 40px; } }
+@media (max-width: 1023px) { .footer-grid { grid-template-columns: 1fr 1fr; } .footer-col-brand { grid-column: 1 / -1; } }
+
+/* ---------- Custom cursor (only active when JS adds body.custom-cursor: mouse devices) ---------- */
+body.custom-cursor, body.custom-cursor * { cursor: none !important; }
+body.custom-cursor input, body.custom-cursor textarea { cursor: text !important; }
+.cursor-ring, .cursor-dot { position: fixed; left: 0; top: 0; z-index: 9999; pointer-events: none; border-radius: 999px; opacity: 0; will-change: transform; }
+.cursor-ring { width: 49px; height: 49px; border: 1.5px solid #d60000; transition: opacity .25s ease, background-color .25s ease, border-color .25s ease; }
+.cursor-dot { width: 11px; height: 11px; background: #d60000; transition: opacity .25s ease, background-color .25s ease; }
+.cursor-ring.is-hovering { background: rgba(214,0,0,.12); }
+/* Over crimson or obsidian surfaces: off-white */
+.cursor-ring.is-light { border-color: #f8f9fa; }
+.cursor-dot.is-light { background: #f8f9fa; }
+.cursor-ring.is-light.is-hovering { background: rgba(248,249,250,.16); }
+
+/* ---------- Global button motion (8) ---------- */
+/* Add class "fx-none" to any button that should NOT get these effects (e.g. gallery dots). */
+.cta-dark, .cta-outline, .contact-submit-outline, .map-link, .video-sound-btn, .ignition-btn { --fx-glow: rgba(23,25,27,.3); }
+:is(button:not(.fx-none), .dealer-header-cta, .floating-dealer, .cta-dark, .cta-outline, .contact-submit, a.shimmer, .social-badge, .map-link) {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+:is(button:not(.fx-none), .dealer-header-cta, .floating-dealer, .cta-dark, .cta-outline, .contact-submit, a.shimmer, .social-badge, .map-link):not([aria-disabled="true"]):hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 10px 24px -6px var(--fx-glow, rgba(214,0,0,.4)), 0 2px 8px rgba(23,25,27,.12);
+  filter: brightness(1.07) saturate(1.05);
+}
+:is(button:not(.fx-none), .dealer-header-cta, .floating-dealer, .cta-dark, .cta-outline, .contact-submit, a.shimmer, .social-badge, .map-link):not([aria-disabled="true"]):active {
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 3px 8px -2px var(--fx-glow, rgba(214,0,0,.4));
+  filter: brightness(.97);
+  transition-duration: .08s;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1023px) {
+  .desktop-nav { display: none; }
+  .mobile-menu-button { display: block; margin-left: 0; }
+  .mobile-nav { display: grid; gap: 0; border-top: 1px solid rgba(40,43,45,.1); padding: 3px 18px 10px; }
+  .mobile-nav .nav-link { border-bottom: 1px solid rgba(40,43,45,.14); padding: 14px 0; color: #17191b; }
+  .dealer-header-cta { margin-left: auto; padding: 10px 13px; font-size: 9.5px; }
+  .header-inner { gap: 8px; }
+}
+
+@media (max-width: 767px) {
+  .header-inner { min-height: 48px; padding: 3px 8px 3px 16px; }
+  .header-float .header-inner { padding: 3px 6px 3px 12px; }
+  .header-float { top: 8px; }
+  .logo-link { width: 104px; height: 38px; }
+  .floating-dealer { right: 16px; bottom: 18px; }
+  .founder-card { min-height: 0; }
+  .founder-media { min-height: 0; aspect-ratio: 4 / 3; }
+  .founder-copy { min-height: 170px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .footer-bottom { flex-direction: column; }
+  .map-card { min-height: 340px; }
+  /* Mobile buttons: full width, centred, wrap-safe */
+  .cta-dark, .cta-outline { width: 100%; padding: 14px 18px; font-size: 10.5px; letter-spacing: .1em; text-align: center; line-height: 1.25; }
+  .stat-card { min-height: 150px; padding: 16px; }
+  .video-caption { font-size: 12px; }
+}
+
+@media (max-width: 420px) {
+  .dealer-header-cta { font-size: 9px; padding: 9px 11px; gap: 5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  .rv { opacity: 1; transform: none; }
+  /* Carousel becomes a manual swipe row instead of an endlessly spinning track */
+  .animate-marquee { animation: none !important; }
+  .marquee-viewport { overflow-x: auto; }
+}

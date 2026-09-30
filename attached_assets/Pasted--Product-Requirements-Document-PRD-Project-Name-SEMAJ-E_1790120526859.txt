@@ -1,0 +1,183 @@
+# Product Requirements Document (PRD)
+
+**Project Name:** SEMAJ Elite Autos Web Platform
+
+**Document Version:** 1.0
+
+**Target Release:** Q4 2026
+
+**Document Owner:** SEMAJ Elite Autos Product & Engineering Team
+
+---
+
+## 1. Executive Summary & Vision
+
+The **SEMAJ Elite Autos Web Platform** is a high-performance, minimalist digital showroom designed to bridge trust, luxury, and digital convenience for automotive buyers in Nigeria. Built on a lightweight, motion-rich architecture, the application streamlines vehicle browsing, instant search filtering, multimedia previewing (including engine startup audio and auto-swiping car angles), and direct WhatsApp conversion.
+
+---
+
+## 2. Target Audience & Core User Stories
+
+### Target Audience
+
+* **Primary:** Nigerian automotive buyers (executives, working professionals, business owners) seeking verified foreign-used (*Tokunbo*) or high-grade pre-owned vehicles with zero hidden agent markups.
+* **Secondary:** Out-of-state buyers (Lagos, Abuja, Port Harcourt, Ibadan) requiring remote vehicle inspection, transparent customs verification, and bespoke sourcing.
+
+### Core User Stories
+
+1. **Instant Search & Discovery:** *As a buyer searching for a specific brand (e.g., Mercedes-Benz), I want the showroom list to filter live on every keystroke so that I can instantly see relevant inventory without reloading pages.*
+2. **Visual & Audio Inspection:** *As a buyer evaluating a car remotely, I want to see an auto-sliding preview of its front, rear, and interior views, as well as listen to its actual engine startup sound, so that I can feel confident before scheduling an in-person physical inspection.*
+3. **Transparent Sourcing & Founder Trust:** *As a cautious buyer wary of automotive fraud, I want clear access to the founder’s standards and direct WhatsApp links so I can communicate straight with the primary dealer.*
+
+---
+
+## 3. Product Features & Functional Requirements
+
+### 3.1. Design System & Global Interaction Physics
+
+* **Custom Crimson Red Cursor System:**
+* Replaces default desktop cursor with an active target reticle: an outer ring (`18px` radius) surrounding a centered solid dot (`4px` radius) in Crimson Red (`#D60000`).
+* Expands ring with magnetic physics on interactive elements; scales down inner dot on hover.
+
+
+* **Curved Visual Geometry:**
+* Main cards, viewports, and modals feature a `28px` border radius to match the sweeping car silhouette in the SEMAJ logo.
+
+
+* Control inputs, search bars, and buttons feature full pill geometry (`rounded-full`).
+
+
+* **Continuous Diagonal Light-Shimmer FX:**
+* All primary CTAs (*"Talk to Dealer"*, *"Request Custom Order"*, *"Inspect on WhatsApp"*) and vehicle price badges display a continuous, subtle diagonal light streak sweeping left-to-right across the element in a loop.
+
+
+* **Micro-Bounce Hover FX:**
+* Price tags and primary CTA buttons execute a subtle vertical spring bounce (`translateY(-4px)`) on hover.
+
+
+
+---
+
+### 3.2. Page Architecture & Routing
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                          GLOBAL NAVIGATION BAR                         │
+├───────────────────────────────────┬────────────────────────────────────┤
+│           HOME PAGE (/)           │      SHOWROOM PAGE (/showroom)     │
+├───────────────────────────────────┼────────────────────────────────────┤
+│ • Dynamic Hero Crossfade          │ • Instant Live Search Bar          │
+│ • Custom Vehicle Sourcing Banner  │ • Status Tabs & Brand Pills        │
+│ • Client Experience Feed          │ • Interactive 3-Column Vehicle Grid│
+│ • Founder Preview & Modal Trigger │ • In-Page Vehicle Detail Modal     │
+├───────────────────────────────────┴────────────────────────────────────┤
+│                         GLOBAL FOOTER COMPONENT                        │
+└────────────────────────────────────────────────────────────────────────┘
+
+```
+
+---
+
+### 3.3. Page Specifications
+
+#### Page 1: Home Page (`/`)
+
+1. **Sticky Navigation Bar:**
+* Contains SEMAJ Elite Autos logo (links to `/`), navigation links (`[Home]`, `[Showroom]`, `[Custom Sourcing]`, `[Founder]`, `[Reviews]`, `[Contact]`), and a **"Talk to Dealer"** WhatsApp CTA button featuring shimmer FX.
+
+
+
+
+2. **Hero Section:**
+* Dynamic 4-second fade transition looping through 3 background visuals: high-res exterior shot, showroom yard alignment, and founder vehicle inspection.
+* Overlay gradient vignette ensuring high contrast for hero text (*"PREMIUM DRIVES. UNCOMPROMISED QUALITY."*).
+* Primary CTA button: **"Explore Showroom"** (Navigates to `/showroom`).
+
+
+3. **Bespoke Vehicle Sourcing Banner:**
+* Curved `24px` card highlighting custom sourcing capabilities.
+* CTA: **"Request Custom Order"** (Triggers WhatsApp chat pre-filled with custom order parameters).
+
+
+4. **Client Experience Feed (Happy Customers):**
+* Single-card vertical crossfade feed cycling through 6–7 real buyer testimonials every 5 seconds (pauses on hover).
+
+
+5. **About the Founder (Semaj) Section:**
+* Left: 3-image auto-sliding container (`3-second` interval loop) showing Semaj conducting engine checks, standing in showroom, and delivering vehicles.
+* Right: Summary quality guarantee statement and **"Read Founder's Story"** CTA button.
+
+
+6. **Founder's Story Modal Overlay:**
+* In-page `28px` rounded modal detailing vehicle history verification, zero-markup pricing, and original customs duty guarantees.
+
+
+
+#### Page 2: Dedicated Showroom Page (`/showroom`)
+
+1. **Live Search & Filter Control Bar:**
+* **Instant Search Input:** Sub-string matching updates the grid on every keyup event without page reloads. Matching characters highlight in Crimson Red (`#D60000`).
+* **Status Tabs:** Filter by `All Vehicles`, `Available`, `On Hold`, and `Recently Sold`.
+* **Brand Filter Pills:** Quick filters for `Toyota`, `Lexus`, `Mercedes-Benz`, `Honda`, `Hyundai`.
+
+
+2. **Interactive Vehicle Grid (3 Columns Desktop / 1 Column Mobile):**
+* **Top 75% Viewport:** Auto-swipes through `Front View` $\rightarrow$ `Rear View` $\rightarrow$ `Interior View` every 3.5 seconds with horizontal slide transitions.
+* **Bottom 25% Title Area:** Displays vehicle title ONLY (e.g., `2012 MERCEDES-BENZ C300`). Price and complete specs are hidden until clicked to preserve a clean layout.
+* **Hover Interaction:** Card lifts `8px` (`translateY(-8px)`), drop-shadow expands (`0 20px 40px rgba(0,0,0,0.08)`), and top edge highlights with a Crimson Red stroke.
+
+
+3. **In-Page Vehicle Detail Modal Overlay:**
+* Triggers on vehicle card click with a glass blur backdrop (`backdrop-filter: blur(12px)`).
+* **Left Area (60%):** Manual & 3.5s auto-swiping high-res gallery + **Engine Startup Sound Player Widget** (Plays recorded vehicle ignition audio).
+* **Right Area (40%):** Technical specifications (Engine, Transmission, Mileage, Customs Duty), **Shimmering Price Tag Badge** (e.g., `₦13,500,000`), and primary **"Inspect on WhatsApp"** CTA button.
+
+
+
+---
+
+## 4. Seed Data Schema (Showroom Inventory)
+
+The platform backend/CMS must be pre-populated with the following seed dataset:
+
+| ID | Vehicle Title | Condition Status | Price (NGN) | Engine Specs | Transmission | Mileage | Image/Audio Assets |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| `CAR-001` | **2012 Toyota Camry ("Muscle")** | Foreign Used | `₦13,500,000` | 2.5L 4-Cyl (178 hp) | 6-Speed Auto | ~110,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-002` | **2015 Toyota Corolla** | Foreign Used | `₦14,800,000` | 1.8L 4-Cyl (132 hp) | CVT Auto | ~95,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-003` | **2010 Lexus ES 350** | Foreign Used | `₦11,500,000` | 3.5L V6 (272 hp) | 6-Speed Auto | ~120,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-004` | **2010 Lexus RX 350 (SUV)** | Foreign Used | `₦15,000,000` | 3.5L V6 (275 hp) | 6-Speed Auto | ~115,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-005` | **2013 Honda Accord ("Gen 9")** | Foreign Used | `₦12,800,000` | 2.4L 4-Cyl (185 hp) | CVT Auto | ~105,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-006` | **2012 Honda CR-V (SUV)** | Foreign Used | `₦12,000,000` | 2.4L 4-Cyl (185 hp) | 5-Speed Auto | ~110,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-007` | **2012 Mercedes-Benz C300 (W204)** | Foreign Used | `₦13,500,000` | 3.0L V6 (228 hp) | 7-Speed Auto | ~100,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-008` | **2015 Mercedes-Benz C300 (W205)** | Foreign Used | `₦18,500,000` | 2.0L Turbo 4-Cyl | 7-Speed Auto | ~90,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-009` | **2017 Hyundai Elantra** | Foreign Used | `₦13,800,000` | 2.0L 4-Cyl (147 hp) | 6-Speed Auto | ~85,000 mi | Front, Rear, Interior, Audio `.mp3` |
+| `CAR-010` | **2015 Hyundai Tucson (SUV)** | Foreign Used | `₦12,500,000` | 2.0L 4-Cyl (164 hp) | 6-Speed Auto | ~98,000 mi | Front, Rear, Interior, Audio `.mp3` |
+
+---
+
+## 5. Non-Functional Requirements (Performance & Compatibility)
+
+* **Performance & Speed:**
+* Initial page load under `1.5 seconds` on 4G networks.
+* Instant search filtering response time $< 50\text{ms}$ (client-side state evaluation).
+
+
+* **Responsive Breakpoints:**
+* Desktop ($> 1024\text{px}$): Full 3-column vehicle grid, custom reticle cursor enabled.
+* Tablet ($768\text{px} - 1023\text{px}$): 2-column grid.
+* Mobile ($< 767\text{px}$): Single column layout, touch-swipe gestures enabled for media cards, standard touch pointer fallback.
+
+
+* **Audio Optimization:**
+* Engine audio clips formatted in compressed `.mp3` ($< 300\text{KB}$ per file) with lazy-loading triggered only when the detail modal opens.
+
+
+
+---
+
+## 6. Verification & Acceptance Criteria
+
+1. **Search Criteria:** Typing any character string in the search bar immediately filters the grid without page flicker or full re-renders.
+2. **Carousel Criteria:** Hovering over any card pauses the 3.5s auto-swipe timer; moving the mouse away resumes the loop seamlessly.
+3. **Audio Criteria:** Clicking the engine startup toggle plays audio without disrupting active background timers or carousel transitions.
+4. **WhatsApp Integration:** Clicking any WhatsApp CTA successfully passes pre-formatted vehicle details (Title, Price, Duty Status) straight into the WhatsApp conversation interface.
