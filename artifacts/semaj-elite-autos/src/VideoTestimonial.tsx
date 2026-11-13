@@ -8,7 +8,7 @@ const LEAVE_FADE_MS = 300; // quick fade when the video scrolls out of view
 
 const clamp01 = (n: number) => Math.min(1, Math.max(0, n));
 
-export function VideoTestimonial() {
+export function VideoTestimonial({ paused }: { paused: boolean }) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const fadeRef = useRef(0);
@@ -33,7 +33,7 @@ export function VideoTestimonial() {
 
   const toggleSound = () => {
     const video = videoRef.current;
-    if (!video) return;
+    if (!video || paused) return;
     if (wantsSoundRef.current) {
       wantsSoundRef.current = false;
       setSoundOn(false);
@@ -57,8 +57,12 @@ export function VideoTestimonial() {
     const video = videoRef.current;
     if (!wrap || !video) return;
 
-    // React does not always write the muted attribute; browsers only autoplay muted videos.
+    // Keep playback silent unless the visitor has explicitly enabled sound.
     video.muted = true;
+    if (paused) {
+      video.pause();
+      return;
+    }
     video.play().catch(() => {});
 
     if (!('IntersectionObserver' in window)) return;
@@ -89,18 +93,19 @@ export function VideoTestimonial() {
       io.disconnect();
       cancelAnimationFrame(fadeRef.current);
     };
-  }, [fadeTo]);
+  }, [fadeTo, paused]);
 
   return (
     <div ref={wrapRef} className="video-card">
-      <video ref={videoRef} className="video-card-media" src={testimonialVideo} autoPlay muted loop playsInline preload="metadata" />
+      <video ref={videoRef} className="video-card-media" src={testimonialVideo} muted loop playsInline preload="metadata" />
       <div className="video-card-shade" aria-hidden="true" />
-      <p className="video-caption">Real Moments, Real Satisfaction — Elite Delivery Experience</p>
+      <p className="video-caption">SEMAJ vehicle handover</p>
       <button
         type="button"
         onClick={toggleSound}
+        disabled={paused}
         aria-pressed={soundOn}
-        aria-label={soundOn ? 'Mute video' : 'Unmute video'}
+        aria-label={paused ? 'Enable motion to play video' : soundOn ? 'Mute video' : 'Unmute video'}
         data-testid="button-video-sound"
         className="video-sound-btn"
       >

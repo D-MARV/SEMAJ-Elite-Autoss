@@ -1,8 +1,6 @@
 // src/Preloader.tsx  (same folder as App.tsx, because App.tsx imports './Preloader')
 import { useEffect, useState } from 'react';
-// Upload SEMAJ_Elite_Autos_Logo_4K_transparent.png into attached_assets.
-// If your project appends a numeric suffix to the file name, match it exactly here.
-import semajLogo from '@assets/SEMAJ_Elite_Autos_Logo_1200.webp';
+import semajLogo from '@assets/semaj-elite-autos-logo.svg';
 
 const MIN_TIME = 3000; // how long the preloader stays on screen (ms)
 const FADE_MS = 500; // must match the opacity transition in .preloader (index.css)

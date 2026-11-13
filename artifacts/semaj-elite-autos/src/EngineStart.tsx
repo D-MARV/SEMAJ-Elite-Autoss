@@ -89,14 +89,14 @@ export function useEngineAudio() {
   return { audioRef, playing, start, interrupt };
 }
 
-/** The "Start engine" ignition button. Glows and locks itself while `playing` is true. */
+/** Plays an optional engine sound effect on request. */
 export function IgnitionButton({ playing, onStart, className = '' }: { playing: boolean; onStart: () => void; className?: string }) {
   return (
     <button
       type="button"
       // aria-disabled (not the disabled attribute) so a click on it can never fall through to the card underneath.
       aria-disabled={playing}
-      aria-label={playing ? 'Engine running' : 'Start engine'}
+      aria-label={playing ? 'Sound effect playing' : 'Play engine sound effect'}
       data-testid="button-start-engine"
       className={`ignition-btn ${playing ? 'is-running' : ''} ${className}`}
       onClick={(e) => {
@@ -105,7 +105,7 @@ export function IgnitionButton({ playing, onStart, className = '' }: { playing: 
       }}
     >
       <Power size={14} />
-      <span>{playing ? 'Engine running' : 'Start engine'}</span>
+      <span>{playing ? 'Sound playing' : 'Play sound'}</span>
     </button>
   );
 }
