@@ -489,45 +489,49 @@ function Footer() {
   return (
     <footer className="site-footer" data-cursor-invert="">
       <div className="footer-inner">
-        <div className="footer-intro">
-          <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }} className="footer-brand-lockup" aria-label="SEMAJ Elite Autos home">
-            <img src="/favicon.svg" alt="" className="footer-logo" />
-            <span className="footer-brand-copy"><strong>SEMAJ ELITE AUTOS</strong><small>Vehicle details. Direct contact. A clearer path to your next car.</small></span>
-          </a>
-          <a href={whatsapp('Hello SEMAJ, I would like to plan a visit to the showroom in Lekki Phase 1.')} target="_blank" rel="noreferrer" className="footer-cta">Plan a showroom visit <ArrowUpRight size={16} /></a>
-        </div>
-        <div className="footer-grid">
-          <div>
-            <p className="footer-label">Quick links</p>
-            <div className="footer-links">{navItems.map(link)}</div>
+        <Reveal variant="up">
+          <div className="footer-intro">
+            <a href="/" onClick={(e) => { e.preventDefault(); navigate('/'); }} className="footer-brand-lockup" aria-label="SEMAJ Elite Autos home">
+              <img src="/favicon.svg" alt="" className="footer-logo" />
+              <span className="footer-brand-copy"><strong>SEMAJ ELITE AUTOS</strong><small>Vehicle details. Direct contact. A clearer path to your next car.</small></span>
+            </a>
+            <a href={whatsapp('Hello SEMAJ, I would like to plan a visit to the showroom in Lekki Phase 1.')} target="_blank" rel="noreferrer" className="footer-cta">Plan a showroom visit <ArrowUpRight size={16} /></a>
           </div>
-          <div>
-            <p className="footer-label">Inventory</p>
-            <div className="footer-links">
-              <a href="/showroom" onClick={(e) => { e.preventDefault(); navigate('/showroom'); }}>All vehicles</a>
-              {BRANDS.slice(1).map((b) => (
-                <a key={b} href="/showroom" onClick={(e) => { e.preventDefault(); navigate(`/showroom?brand=${encodeURIComponent(b)}`); }}>{b}</a>
-              ))}
+        </Reveal>
+        <Reveal variant="up" delay={120}>
+          <div className="footer-grid">
+            <div>
+              <p className="footer-label">Quick links</p>
+              <div className="footer-links">{navItems.map(link)}</div>
+            </div>
+            <div>
+              <p className="footer-label">Inventory</p>
+              <div className="footer-links">
+                <a href="/showroom" onClick={(e) => { e.preventDefault(); navigate('/showroom'); }}>All vehicles</a>
+                {BRANDS.slice(1).map((b) => (
+                  <a key={b} href="/showroom" onClick={(e) => { e.preventDefault(); navigate(`/showroom?brand=${encodeURIComponent(b)}`); }}>{b}</a>
+                ))}
+              </div>
+            </div>
+            <div>
+              <p className="footer-label">Company</p>
+              <div className="footer-links">{company.map(link)}</div>
+            </div>
+            <div>
+              <p className="footer-label">Contact info</p>
+              <div className="footer-links">
+                <span className="footer-line"><MapPin size={15} /> Lekki Phase 1, Lagos, Nigeria</span>
+                <a href="tel:+2349015270689"><Phone size={15} /> +234 901 527 0689</a>
+                <a href={whatsapp(dealerMessage)} target="_blank" rel="noreferrer" data-testid="link-footer-whatsapp"><MessageCircle size={15} /> Request a private viewing</a>
+              </div>
             </div>
           </div>
-          <div>
-            <p className="footer-label">Company</p>
-            <div className="footer-links">{company.map(link)}</div>
+          <div className="footer-bottom">
+            <span>© 2026 SEMAJ Elite Autos. All rights reserved.</span>
+            <div className="footer-socials">{social.map(({ Icon, href, label }) => <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer" aria-label={label} className="social-badge"><Icon size={16} /></a>)}</div>
+            <span>Clear sourcing. Direct access.</span>
           </div>
-          <div>
-            <p className="footer-label">Contact info</p>
-            <div className="footer-links">
-              <span className="footer-line"><MapPin size={15} /> Lekki Phase 1, Lagos, Nigeria</span>
-              <a href="tel:+2349015270689"><Phone size={15} /> +234 901 527 0689</a>
-              <a href={whatsapp(dealerMessage)} target="_blank" rel="noreferrer" data-testid="link-footer-whatsapp"><MessageCircle size={15} /> Request a private viewing</a>
-            </div>
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <span>© 2026 SEMAJ Elite Autos. All rights reserved.</span>
-          <div className="footer-socials">{social.map(({ Icon, href, label }) => <a key={label} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noreferrer" aria-label={label} className="social-badge"><Icon size={16} /></a>)}</div>
-          <span>Clear sourcing. Direct access.</span>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );
